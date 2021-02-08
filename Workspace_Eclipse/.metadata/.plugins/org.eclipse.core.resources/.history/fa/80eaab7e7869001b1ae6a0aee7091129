@@ -1,0 +1,146 @@
+import com.mongodb.MongoClient;
+
+import java.net.UnknownHostException;
+
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.ServerAddress;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class MongoClass {
+
+	public static void main(String[] args) {
+		
+		try {
+			MongoClient mongoClient= new MongoClient("localhost",27017);
+			System.out.println("Connection reussite !");
+			
+			
+			DB db = mongoClient.getDB("DataLivres");
+			DBCollection dbLivres=db.getCollection("DataL");
+		
+			
+			System.out.println("########### Bienvenue sur notre application de gestion de libraire ! #########");
+			System.out.println("Que souhaitez vous faire ?");
+			System.out.println("Pour ajouter un livre taper A");
+			System.out.println("Pour supprimer un livre taper B");
+			System.out.println("Pour modifier un livre taper C");
+			System.out.println("Pour rechercher un livre taper D \n");
+			
+			
+		
+
+			System.out.println("Saisir choix:");
+			Scanner sc = new Scanner(System.in);
+		    String i = sc.nextLine();
+		  
+		
+		    
+		    if(i.equals("A")) {
+			    System.out.print("############ Page d'ajout de livre #############");
+			 
+				System.out.println("Saisir titre du livre:");
+			    String titre = sc.nextLine();
+			    System.out.println("Saisir nombre de page du livre:");
+			    String nombrepg = sc.nextLine();
+			    System.out.println("Saisir Description du livre:");
+			    String desc = sc.nextLine();
+			    System.out.println("Saisir Catégorie du livre:");
+			    String cat = sc.nextLine();
+			    
+			    
+			    BasicDBObject ajoutLivre = new BasicDBObject();
+			    ajoutLivre.put("title",titre);
+			    ajoutLivre.put("pageCount",nombrepg);
+			    ajoutLivre.put("shortDescription",desc);
+			    ajoutLivre.put("categories",cat);
+			    
+			    dbLivres.insert(ajoutLivre);
+			    
+			 /**
+			    BasicDBObject whereQuery = new BasicDBObject();
+			    whereQuery.put("categories", "Internet");
+			    DBCursor cursor = dbLivres.find(whereQuery);
+			    while(cursor.hasNext()) {
+			        System.out.println(cursor.next());
+			    }
+			**/  
+			    
+		    }
+		    if(i.equals("B")) {
+		    	System.out.print("############ Page de suppression de livre #############");
+		    	
+		    	 System.out.println("Saisir le titre du livre à supprimer:");
+				 String titreLS = sc.nextLine();
+		    	 BasicDBObject document = new BasicDBObject();
+		    	 
+		    	 document.put("title",titreLS);
+		    	 dbLivres.remove(document);
+		 	
+		    }
+		   
+		    if(i.equals("C")) {
+		    	System.out.print("############ Page de modification de livre #############");
+		    	
+		    	
+		    	 
+		    	 
+		    }
+		    
+		    
+		    if(i.equals("D")) {
+		    	System.out.print("############ Page de recherche de livre #############");
+		    	
+		    	
+		    	System.out.println("Vous souhaitez rechercher par titre ou catégorie?");
+				 String Trech = sc.nextLine();
+		    	if(Trech.equals("titre")) {
+		    		
+		    		System.out.println("Saisir titre du livre rechercher:");
+		    		 String TLrech = sc.nextLine();
+		    		 
+		    		  BasicDBObject whereQuery = new BasicDBObject();
+					    whereQuery.put("titre", TLrech);
+					    DBCursor cursor = dbLivres.find(whereQuery);
+					    while(cursor.hasNext()) {
+					        System.out.println(cursor.next());
+					    }
+					    
+		    	}
+		    	
+		    	if(Trech.equals("catégorie")){
+		    		
+		    		System.out.println("Saisir catégorie livre rechercher: \n");
+		    		System.out.println("Catégories existantsJava,Internet,Perl,Microsoft .NET");
+		    		 String TLrech = sc.nextLine();
+		    		 
+		    		  BasicDBObject whereQuery = new BasicDBObject();
+					    whereQuery.put("categories", TLrech);
+					    DBCursor cursor = dbLivres.find(whereQuery);
+					    while(cursor.hasNext()) {
+					        System.out.println(cursor.next());
+					    }
+		    		
+		    	}
+			
+
+		    }
+		    	
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			System.out.println("Connection echoué !");
+		}
+		
+	}
+
+}
